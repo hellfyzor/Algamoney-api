@@ -1,5 +1,6 @@
 package com.algaworks.algamoney.api.exceptionhandler;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.context.MessageSource;

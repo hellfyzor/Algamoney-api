@@ -53,7 +53,6 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 
             erros.add(new Erro(mensagemUsuario, mensagemDesenvolvedor));
         }
-
         return erros;
     }
 

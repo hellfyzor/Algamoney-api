@@ -9,9 +9,8 @@ import javax.validation.constraints.Size;
 
 @Data
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "categoria")
-public class Categoria {
+@Table(name = "pessoa")
+public class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +20,10 @@ public class Categoria {
     @Size(min = 3, max = 50)
     private String nome;
 
+    @Embedded
+    private Endereco endereco;
 
+    @NotNull
+    private Boolean ativo;
 
 }

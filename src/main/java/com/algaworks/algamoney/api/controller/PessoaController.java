@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/{pessoas}")
@@ -35,6 +36,13 @@ public class PessoaController {
         response.setHeader("Location", uri.toASCIIString());
 
         return ResponseEntity.created(uri).body(pessoaSalva);
+    }
+
+    @GetMapping("/{codigo}")
+    public ResponseEntity<Pessoa> buscarPorCodigo(@PathVariable Long codigo){
+        Optional<Pessoa> pessoa = pessoaRepository.findById(codigo);
+
+        return pessoa.isPresent() ? ResponseEntity.ok(pessoa.get()) : ResponseEntity.notFound().build();
     }
 
 }

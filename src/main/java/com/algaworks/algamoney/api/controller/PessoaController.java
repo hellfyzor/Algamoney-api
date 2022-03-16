@@ -4,7 +4,6 @@ import com.algaworks.algamoney.api.event.RecursoCriadoEvent;
 import com.algaworks.algamoney.api.model.Pessoa;
 import com.algaworks.algamoney.api.repository.PessoaRepository;
 import com.algaworks.algamoney.api.service.PessoaService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -50,7 +49,7 @@ public class PessoaController {
     public ResponseEntity<Pessoa> buscarPorCodigo(@PathVariable Long codigo){
         Optional<Pessoa> pessoa = pessoaRepository.findById(codigo);
 
-        return pessoa.isPresent() ? ResponseEntity.ok(pessoa.get()) : ResponseEntity.notFound().build();
+        return pessoa.map(ResponseEntity::ok).orElseThrow(() -> new EmptyResultDataAccessException(1));
     }
 
     @DeleteMapping("/{codigo}")

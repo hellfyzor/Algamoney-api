@@ -33,15 +33,10 @@ public class PessoaService {
     }
 
 
-    private Pessoa buscarPessoaPeloCodigo(Long codigo) {
+    public Pessoa buscarPessoaPeloCodigo(Long codigo) {
         Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo);
 
         return pessoaSalva.orElseThrow(() -> new EmptyResultDataAccessException(1));
     }
 
-    public Pessoa buscarPessoaPeloId(Long codigo) {
-        Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo);
-
-        return pessoaSalva.orElseThrow(() -> new EmptyResultDataAccessException(1));
-    }
 }

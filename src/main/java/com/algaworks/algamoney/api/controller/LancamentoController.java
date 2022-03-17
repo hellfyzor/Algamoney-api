@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,19 +39,19 @@ public class LancamentoController {
     @Autowired
     private MessageSource messageSource;
 
-    /*____________________________________________________________*/
+    /*_______________________________METHODS_____________________________*/
 
     @GetMapping
-    public List<Lancamento> pesquisar (LancamentoFilter lancamentoFilter){
+    public Page<Lancamento> pesquisar (LancamentoFilter lancamentoFilter, Pageable pageable){
 
-        return lancamentoRepository.filtrar(lancamentoFilter);
+        return lancamentoRepository.filtrar(lancamentoFilter, pageable);
     }
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Lancamento> buscarPorCodigo(@PathVariable Long codigo){
         Optional<Lancamento> lancamento = lancamentoRepository.findById(codigo);
 
-        return lancamento.isPresent() ? ResponseEntity.ok(lancamento.get()) : ResponseEntity.notFound().build();
+        return lancamento.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -61,6 +63,15 @@ public class LancamentoController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
     }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void  remover (@PathVariable Long codigo){
+        lancamentoRepository.deleteById(codigo);
+
+    }
+
+    /*---------------------------------EXCEPTIONS----------------------------------*/
 
     @ExceptionHandler({PessoaInexistenteOuInativaException.class})
     public ResponseEntity<Object> hadlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex){
